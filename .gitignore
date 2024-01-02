@@ -69,6 +69,7 @@ work/
 metastore_db/
 *.zip
 package/
+.coverage
 
 # End of https://www.gitignore.io/api/sbt,scala,intellij
 
