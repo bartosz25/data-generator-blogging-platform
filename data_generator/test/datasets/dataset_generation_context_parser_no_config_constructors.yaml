@@ -1,0 +1,17 @@
+dataset:
+  rows: 1000
+  composition_percentage:
+    duplicates: 25
+    missing_fields: 31
+    unprocessable_rows: 15
+data_blocker:
+  type: 'no'
+entity:
+  type: device
+generator:
+  type: one-shot
+writer:
+  type: json
+  configuration:
+    output_path: '/tmp/abc'
+    clean_path: true

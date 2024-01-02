@@ -1,0 +1,19 @@
+kafka:
+  broker: localhost:9092
+  topics:
+    raw_data:
+      partitions: 5
+      replication: 1
+      recreate: true
+    invalid_data:
+      partitions: 2
+      replication: 1
+      recreate: true
+    valid_data:
+      partitions: 10
+      replication: 1
+      recreate: false
+  producer:
+    configuration:
+      queue.buffering.max.ms: 2000
+      queue.buffering.max.messages: 10

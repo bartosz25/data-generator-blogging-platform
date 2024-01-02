@@ -1,0 +1,27 @@
+dataset:
+  rows: 1000
+  composition_percentage:
+    duplicates: 25
+    missing_fields: 31
+    unprocessable_rows: 0
+data_blocker:
+  type: sleep
+  configuration:
+    sleep_time_range_seconds:
+      from: 1
+      to: 6
+entity:
+  type: visit
+  configuration:
+    start_time: '2023-11-24T00:00:00Z'
+generator:
+  type: fixed-times
+  configuration:
+    all_runs: 4
+writer:
+  type: kafka
+  configuration:
+    broker: 'localhost:9094'
+    output_topic: 'visits'
+    extra_producer_config:
+      'queue.buffering.max.ms': 2000

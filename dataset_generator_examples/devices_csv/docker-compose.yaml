@@ -1,0 +1,13 @@
+version: '3'
+services:
+  data_generator:
+    image: 'data_generator:latest'
+    container_name: data_generator
+    volumes:
+      - "${OUTPUT_PATH}:/home/data_generator_user/data_generator_output"
+      - "./generation_configuration.yaml:/home/data_generator_user/generation_configuration.yaml"
+    entrypoint:
+      - python3
+      - /home/data_generator_user/data_generator/generate_dataset.py
+      - --config_file
+      - /home/data_generator_user/generation_configuration.yaml

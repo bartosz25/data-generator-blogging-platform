@@ -1,0 +1,9 @@
+Faker==20.1.0
+confluent-kafka==2.3.0
+psycopg2-binary==2.9.9
+assertpy>=0.14
+pytest==7.4.3
+pytest-cov==4.1.0
+pyyaml==6.0.1
+flake8==6.1.0
+autopep8==2.0.4
