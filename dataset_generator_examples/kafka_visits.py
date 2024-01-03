@@ -25,7 +25,7 @@ if __name__ == "__main__":
             )
 
     generate_dataset(
-        generator=ContinuousDatasetGenerator(),
+        generation_controller=ContinuousDatasetGenerator(),
         context=data_generation_context,
         writer=KafkaDatasetWriter(
             broker=kafka_arguments.args.broker, extra_producer_config={'queue.buffering.max.ms': 2000},

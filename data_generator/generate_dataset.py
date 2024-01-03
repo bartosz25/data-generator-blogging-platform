@@ -19,7 +19,7 @@ if __name__ == "__main__":
     config_parser = YamlDatasetGenerationContextParser(configuration_file_path=args.config_file)
     for writer in config_parser.writers:
         generate_dataset(
-            generator=config_parser.generator(),
+            generation_controller=config_parser.generator(),
             context=config_parser.data_generation_context,
             writer=writer
         )

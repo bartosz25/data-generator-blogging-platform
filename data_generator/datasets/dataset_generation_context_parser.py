@@ -3,8 +3,8 @@ from typing import Dict, Any, Optional, List, Callable
 import yaml
 
 from data_generator.datasets.data_generator_entity import EntityGenerator
-from data_generator.datasets.dataset_generators import DatasetGenerator, OneShotDatasetGenerator, \
-    FixedTimesDatasetGenerator, ContinuousDatasetGenerator
+from data_generator.datasets.dataset_generators import DatasetGenerationController, OneShotDatasetGenerationController, \
+    FixedTimesDatasetGenerationController, ContinuousDatasetGenerationController
 from data_generator.datasets.devices.generator import DeviceEntityGenerator
 from data_generator.datasets.generation_context import NotBlockingDataGenerationBlocker, \
     BlockingDataGenerationBlocker, DatasetGenerationContext, DataGenerationBlocker
@@ -42,7 +42,7 @@ class YamlDatasetGenerationContextParser:
         return self._data_generation_context
 
     @property
-    def generator(self) -> Callable[[], DatasetGenerator]:
+    def generator(self) -> Callable[[], DatasetGenerationController]:
         return self._generator
 
     @property
@@ -76,12 +76,12 @@ class YamlDatasetGenerationContextParser:
         return entity_types[entity_type](entity_configuration)
 
     @staticmethod
-    def _get_generator(generator: Dict[str, Any]) -> DatasetGenerator:
+    def _get_generator(generator: Dict[str, Any]) -> DatasetGenerationController:
         generator_type = generator['type']
         generator_types = {
-            'one-shot': lambda config: OneShotDatasetGenerator(),
-            'fixed-times': lambda config: FixedTimesDatasetGenerator(**config),
-            'continuous': lambda config: ContinuousDatasetGenerator()
+            'one-shot': lambda config: OneShotDatasetGenerationController(),
+            'fixed-times': lambda config: FixedTimesDatasetGenerationController(**config),
+            'continuous': lambda config: ContinuousDatasetGenerationController()
         }
         generator_configuration = generator['configuration'] if 'configuration' in generator else {}
         return generator_types[generator_type](generator_configuration)

@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 
 
-class DatasetGenerator(ABC):
+class DatasetGenerationController(ABC):
 
     @abstractmethod
     def should_continue(self) -> bool: raise NotImplementedError
 
 
-class OneShotDatasetGenerator(DatasetGenerator):
+class OneShotDatasetGenerationController(DatasetGenerationController):
 
     def __init__(self):
         self._already_ran = False
@@ -19,7 +19,7 @@ class OneShotDatasetGenerator(DatasetGenerator):
         return True
 
 
-class FixedTimesDatasetGenerator(DatasetGenerator):
+class FixedTimesDatasetGenerationController(DatasetGenerationController):
 
     def __init__(self, all_runs: int):
         self.remaining_runs = all_runs
@@ -29,7 +29,7 @@ class FixedTimesDatasetGenerator(DatasetGenerator):
         return self.remaining_runs >= 0
 
 
-class ContinuousDatasetGenerator(DatasetGenerator):
+class ContinuousDatasetGenerationController(DatasetGenerationController):
 
     def should_continue(self) -> bool:
         return True

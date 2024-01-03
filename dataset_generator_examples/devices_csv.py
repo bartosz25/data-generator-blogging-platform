@@ -24,7 +24,7 @@ if __name__ == "__main__":
         entity_generator=DeviceEntityGenerator()
     )
     generate_dataset(
-        generator=OneShotDatasetGenerator(),
+        generation_controller=OneShotDatasetGenerator(),
         context=data_generation_context,
         writer=CsvFileSystemWriter(
             output_path=filesystem_writers_arguments.args.output_dir,

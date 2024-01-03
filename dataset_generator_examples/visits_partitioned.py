@@ -1,6 +1,6 @@
 import logging
 
-from data_generator.datasets.dataset_generators import OneShotDatasetGenerator
+from data_generator.datasets.dataset_generators import OneShotDatasetGenerationController
 from data_generator.datasets.generation_context import DatasetGenerationContext, \
     NotBlockingDataGenerationBlocker
 from data_generator.datasets.main_generator import generate_dataset
@@ -31,7 +31,7 @@ if __name__ == "__main__":
         logging.info(f'Generating partition {partition}')
         output_path = f'{filesystem_partitioned_writers_arguments.args.output_dir}/{partition}'
         generate_dataset(
-            generator=OneShotDatasetGenerator(),
+            generation_controller=OneShotDatasetGenerationController(),
             context=data_generation_context,
             writer=JsonFileSystemDatasetWriter(
                 output_path=output_path,

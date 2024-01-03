@@ -25,7 +25,7 @@ if __name__ == "__main__":
             )
 
     generate_dataset(
-        generator=ContinuousDatasetGenerator(),
+        generation_controller=ContinuousDatasetGenerator(),
         context=data_generation_context,
         writer=PostgreSQLDatasetWriter(
             host=postgresql_arguments.args.host,
