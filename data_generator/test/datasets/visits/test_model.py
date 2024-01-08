@@ -2,7 +2,6 @@ import datetime
 
 from assertpy import assert_that
 
-from data_generator.datasets.users.model import RegisteredUser
 from data_generator.datasets.visits.model import Visit, VisitContext, UserContext, TechnicalContext
 
 
@@ -31,9 +30,9 @@ def should_return_visit_as_dict():
         'technical': {
             'browser': 'Firefox', 'browser_version': '1beta', 'network_type': 'wifi', 'device_type': 'pc',
             'device_version': 'Windows 10'}
-        }, 'event_time': datetime.datetime(2023, 10, 30, 18, 38, 55),
+    }, 'event_time': datetime.datetime(2023, 10, 30, 18, 38, 55),
         'keep_private': True, 'page': 'home.html', 'user_id': 'user 1',
-                                            'visit_id': 'visit 1'})
+        'visit_id': 'visit 1'})
 
 
 def should_return_partition_key_for_the_visit():

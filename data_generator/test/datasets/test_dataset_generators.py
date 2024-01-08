@@ -1,7 +1,8 @@
 from assertpy import assert_that
 
-from data_generator.datasets.dataset_generators import OneShotDatasetGenerationController, FixedTimesDatasetGenerationController, \
-    ContinuousDatasetGenerationController
+from data_generator.datasets.dataset_generators import (OneShotDatasetGenerationController,
+                                                        FixedTimesDatasetGenerationController,
+                                                        ContinuousDatasetGenerationController)
 
 
 def should_run_only_once_for_the_OneShotDatasetGenerator():

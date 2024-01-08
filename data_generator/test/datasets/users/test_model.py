@@ -2,7 +2,6 @@ import datetime
 
 from assertpy import assert_that
 
-from data_generator.datasets.devices.model import Device
 from data_generator.datasets.users.model import RegisteredUser
 
 

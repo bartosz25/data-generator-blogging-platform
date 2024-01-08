@@ -22,7 +22,7 @@ class KafkaDatasetWriter(DatasetWriter):
     def write_dataset_decorated_rows(self, decorated_rows: List[DataGeneratorEntity]):
         """
         Traceback (most recent call last):
-        File "/home/bartosz/workspace/data-generator/dataset_examples/kafka/generate_dataset_to_kafka.py", line 51, in <module>
+        File "/dataset_examples/kafka/generate_dataset_to_kafka.py", line 51, in <module>
             configuration.send_message(output_topic_name, action)
         File "/home/bartosz/workspace/data-generator/data_generator/sink/kafka_writer.py", line 60, in send_message
             self.producer.produce(topic_name, value=bytes(message, encoding='utf-8'))

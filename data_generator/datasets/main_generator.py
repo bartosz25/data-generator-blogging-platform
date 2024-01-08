@@ -16,5 +16,3 @@ def generate_dataset(generation_controller: DatasetGenerationController, context
         writer.flush()
 
         context.irregular_data_blocker.block()
-
-

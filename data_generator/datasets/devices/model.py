@@ -1,5 +1,5 @@
 import dataclasses
-from typing import Dict, Any, List
+from typing import Dict, Any
 
 from data_generator.datasets.data_generator_entity import DataGeneratorEntity
 

@@ -22,14 +22,14 @@ class RegisteredUserEntityGenerator(EntityGenerator):
             unique_id = threading.current_thread().ident + len(self.generated_rows)
             login = f'user_{unique_id}'
             email = f'{login}@abcdefghijklmnop.com'
-            registered_date = datetime.datetime.today() - datetime.timedelta(days=
-                                                                             random.randint(0, 365 * 2))
+            registered_date = datetime.datetime.today() - datetime.timedelta(days=random.randint(0, 365 * 2))
             # TODO: handle the case when the first_connection > today()
             first_connection_date = None
             last_connection_date = None
             if random.choice([True, False]):
+                today = datetime.datetime.today()
                 first_connection_date = registered_date + datetime.timedelta(minutes=random.randint(1, 60*24*6))
-                last_connection_date = datetime.datetime.today() - datetime.timedelta(minutes=random.randint(1, 60*24*20))
+                last_connection_date = today - datetime.timedelta(minutes=random.randint(1, 60*24*20))
                 # TODO: check if last is always after the first and they don't overlap with today()!
 
             registered_user = RegisteredUser(

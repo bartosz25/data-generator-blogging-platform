@@ -19,4 +19,3 @@ class RegisteredUser(DataGeneratorEntity):
 
     def partition_key(self) -> str:
         return self.login
-

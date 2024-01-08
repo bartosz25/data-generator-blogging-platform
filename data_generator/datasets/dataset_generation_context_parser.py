@@ -1,10 +1,11 @@
-from typing import Dict, Any, Optional, List, Callable
+from typing import Dict, Any, List, Callable
 
 import yaml
 
 from data_generator.datasets.data_generator_entity import EntityGenerator
-from data_generator.datasets.dataset_generators import DatasetGenerationController, OneShotDatasetGenerationController, \
-    FixedTimesDatasetGenerationController, ContinuousDatasetGenerationController
+from data_generator.datasets.dataset_generators import (DatasetGenerationController, OneShotDatasetGenerationController,
+                                                        FixedTimesDatasetGenerationController,
+                                                        ContinuousDatasetGenerationController)
 from data_generator.datasets.devices.generator import DeviceEntityGenerator
 from data_generator.datasets.generation_context import NotBlockingDataGenerationBlocker, \
     BlockingDataGenerationBlocker, DatasetGenerationContext, DataGenerationBlocker
@@ -54,12 +55,11 @@ class YamlDatasetGenerationContextParser:
         blocker_type = data_blocker['type']
         blocker_types = {
             'no': lambda blocker_config: NotBlockingDataGenerationBlocker(),
-            'sleep': lambda blocker_config: BlockingDataGenerationBlocker(sleep_time_range_seconds=
-                                                                          range(blocker_config[
-                                                                                    'sleep_time_range_seconds']['from'],
-                                                                                blocker_config[
-                                                                                    'sleep_time_range_seconds']['to'])
-                                                                          )
+            'sleep': lambda blocker_config: BlockingDataGenerationBlocker(sleep_time_range_seconds=range(
+                blocker_config['sleep_time_range_seconds']['from'],
+                blocker_config[
+                    'sleep_time_range_seconds']['to'])
+            )
         }
         blocker_configuration = data_blocker['configuration'] if 'configuration' in data_blocker else {}
         return blocker_types[blocker_type](blocker_configuration)
