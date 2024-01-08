@@ -1,0 +1,28 @@
+version: '3.1'
+services:
+  data_generator:
+    depends_on:
+      postgres:
+        condition: service_healthy
+    image: waitingforcode/data-generator-blogging-platform:0.1-beta
+    container_name: dedp_data_generator_debezium
+    volumes:
+      - ./generation_configuration.yaml:/home/data_generator_user/generation_configuration.yaml
+    entrypoint:
+      - python3
+      - /home/data_generator_user/data_generator/generate_dataset.py
+      - --config_file
+      - /home/data_generator_user/generation_configuration.yaml
+  postgres:
+    image: quay.io/debezium/postgres:15
+    container_name: cdc_postgres
+    ports:
+     - 5432:5432
+    environment:
+     - POSTGRES_USER=postgres
+     - POSTGRES_PASSWORD=postgres
+     - POSTGRES_DB=generator
+    volumes:
+    - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U postgres']

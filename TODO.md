@@ -9,3 +9,7 @@
   - [ ] add example for Visits and partitioned JSON 
   - [ ] add example for Devices and CSV
   - [ ] add example for Users and PostgreSQL
+
+# Release
+- [ ] Docker
+  - [ ] release from Github actions

@@ -9,9 +9,6 @@ clean_build:
 build_image:
 	docker build  -t waitingforcode/data-generator-blogging-platform:0.1-beta -f docker/Dockerfile .
 
-run_image:
-	winpty docker run -ti data_generator_blogging_platform:0.1-beta  bash
-
 release_docker_image:
 	docker push waitingforcode/data-generator-blogging-platform:0.1-beta
 

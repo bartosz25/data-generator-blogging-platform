@@ -68,6 +68,14 @@ To use the project, you can either adapt one of th examples present in the [data
 or use the Docker image. 
 
 ### Docker image
+#### Building
+Currently there is one Docker image for all available data stores. This situation may change in the future if you 
+encounter some issues with new I/O integrations or with the libraries upgrades. 
+
+Building and releasing a Docker image is a manual task. Adapt the `build_image` and `release_docker_image` tasks in
+the `Makefile`. 
+
+#### Using
 Using the Docker image requires creating a configuration `YAML` file following the schema
 ```yaml
 dataset:
@@ -257,3 +265,7 @@ make reformat_all
 ## Pre-commit hook setup
 The hook will execute the code formatting before the commit and the unit tests before the push. To install
 it, please use [Pre-commit plugin](https://pre-commit.com/) and `pre-commit install` command.
+```
+pip install pre-commit
+pre-commit install
+```
