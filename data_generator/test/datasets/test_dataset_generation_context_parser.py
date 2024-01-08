@@ -12,7 +12,7 @@ def should_generate_context_for_constructors_without_arguments():
 
     config_parser = YamlDatasetGenerationContextParser(configuration_file_path=config_path)
 
-    assert_that(type(config_parser.generator()).__name__).is_equal_to('OneShotDatasetGenerator')
+    assert_that(type(config_parser.generator()).__name__).is_equal_to('OneShotDatasetGenerationController')
     assert_that(config_parser.writers).is_length(1)
     assert_that(type(config_parser.writers[0]).__name__).is_equal_to('JsonFileSystemDatasetWriter')
     assert_that(config_parser.writers[0].output_path_with_file).is_equal_to('/tmp/abc/dataset.json')
@@ -33,7 +33,7 @@ def should_generate_context_for_constructors_with_arguments():
 
     config_parser = YamlDatasetGenerationContextParser(configuration_file_path=config_path)
 
-    assert_that(type(config_parser.generator()).__name__).is_equal_to('FixedTimesDatasetGenerator')
+    assert_that(type(config_parser.generator()).__name__).is_equal_to('FixedTimesDatasetGenerationController')
     assert_that(config_parser.generator().remaining_runs).is_equal_to(4)
     assert_that(config_parser.writers).is_length(1)
     assert_that(type(config_parser.writers[0]).__name__).is_equal_to('KafkaDatasetWriter')
@@ -60,7 +60,7 @@ def should_generate_context_for_partitioned_configuration_file():
 
     config_parser = YamlDatasetGenerationContextParser(configuration_file_path=config_path)
 
-    assert_that(type(config_parser.generator()).__name__).is_equal_to('OneShotDatasetGenerator')
+    assert_that(type(config_parser.generator()).__name__).is_equal_to('OneShotDatasetGenerationController')
     assert_that(config_parser.writers).is_length(2)
     assert_that(type(config_parser.writers[0]).__name__).is_equal_to('JsonFileSystemDatasetWriter')
     assert_that(config_parser.writers[0].output_path_with_file).is_equal_to('/tmp/abc/date=2023-11-01/dataset.json')
