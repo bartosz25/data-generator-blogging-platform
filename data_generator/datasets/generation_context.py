@@ -46,18 +46,20 @@ class DatasetGenerationContext:
         rows_to_generate = self.number_of_rows
         logging.info(f'Will be generating {rows_to_generate} rows...')
 
-        # TODO: refactor me in a single function
-        number_of_duplicates = int(floor(rows_to_generate * (self.duplicates_percentage / 100)))
+        number_of_duplicates = DatasetGenerationContext.calculate_percentage(rows_to_generate,
+                                                                             self.duplicates_percentage)
         logging.info(f'...{number_of_duplicates} are duplicates...')
         decorators = [DuplicatesRowDecorator(self.entity_generator.generate_row, i)
                       for i in range(0, number_of_duplicates)]
 
-        number_of_missing_fields = int(floor(rows_to_generate * (self.missing_fields_percentage / 100)))
+        number_of_missing_fields = DatasetGenerationContext.calculate_percentage(rows_to_generate,
+                                                                                 self.missing_fields_percentage)
         logging.info(f'...{number_of_missing_fields} have missing fields...')
         decorators[len(decorators):] = [MissingFieldsRowDecorator(self.entity_generator.generate_row, i)
                                         for i in range(len(decorators), len(decorators) + number_of_missing_fields)]
 
-        number_of_unprocessable_rows = int(floor(rows_to_generate * (self.unprocessable_rows_percentage / 100)))
+        number_of_unprocessable_rows = DatasetGenerationContext.calculate_percentage(rows_to_generate,
+                                                                                     self.unprocessable_rows_percentage)
         logging.info(f'...{number_of_unprocessable_rows} are unprocessable...')
         decorators[len(decorators):] = [UnprocessableRecordRowDecorator(self.entity_generator.generate_row, i)
                                         for i in
@@ -71,3 +73,7 @@ class DatasetGenerationContext:
                                         for i in
                                         range(len(decorators), len(decorators) + number_of_rows_without_issues)]
         return decorators
+
+    @staticmethod
+    def calculate_percentage(rows_to_generate: int, percentage: int) -> int:
+        return int(floor(rows_to_generate * (percentage / 100)))
