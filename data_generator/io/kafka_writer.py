@@ -5,6 +5,7 @@ from typing import Any, Dict, List
 from confluent_kafka import Producer
 
 from data_generator.datasets.data_generator_entity import DataGeneratorEntity
+from data_generator.io.converters import json_converter
 from data_generator.io.dataset_writer import DatasetWriter
 
 
@@ -43,7 +44,7 @@ class KafkaDatasetWriter(DatasetWriter):
                 logging.error("Record was not correctly delivered: %s", error)
 
         event_key = row.partition_key()
-        event_json = json.dumps(row.as_dict())
+        event_json = json.dumps(row.as_dict(), default=json_converter)
         self.producer.produce(topic=self.output_topic, key=bytes(event_key, encoding='utf-8'),
                               value=bytes(event_json, encoding='utf-8'),
                               on_delivery=delivery_callback)

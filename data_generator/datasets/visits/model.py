@@ -1,5 +1,6 @@
 import dataclasses
 import logging
+import uuid
 from datetime import datetime
 from typing import Optional, Dict, Any
 
@@ -45,4 +46,9 @@ class Visit(DataGeneratorEntity):
         return dataclasses.asdict(self)
 
     def partition_key(self) -> str:
-        return self.visit_id
+        # partition key can be missing due to the data quality issues
+        # return a random uuid instead
+        if not self.visit_id:
+            return str(uuid.uuid4())
+        else:
+            return self.visit_id
