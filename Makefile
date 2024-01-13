@@ -7,10 +7,10 @@ clean_build:
 	python setup.py clean --all
 
 build_image:
-	docker build  -t waitingforcode/data-generator-blogging-platform:0.1-beta -f docker/Dockerfile .
+	docker build  -t waitingforcode/data-generator-blogging-platform:0.2-beta -f docker/Dockerfile .
 
 release_docker_image:
-	docker push waitingforcode/data-generator-blogging-platform:0.1-beta
+	docker push waitingforcode/data-generator-blogging-platform:0.2-beta
 
 test_all:
 	pytest data_generator/
