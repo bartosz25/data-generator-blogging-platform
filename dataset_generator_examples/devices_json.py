@@ -2,7 +2,7 @@ import logging
 
 from data_generator.datasets.devices.generator import DeviceEntityGenerator
 from data_generator.datasets.generation_context import DatasetGenerationContext, \
-    NotBlockingDataGenerationBlocker, OneShotDatasetGenerator
+    NotBlockingDataGenerationBlocker, OneShotDatasetGenerationController
 from data_generator.datasets.main_generator import generate_dataset
 from data_generator.io.file_system_writer import JsonFileSystemDatasetWriter
 
@@ -25,7 +25,7 @@ if __name__ == "__main__":
         entity_generator=DeviceEntityGenerator()
     )
     generate_dataset(
-        generation_controller=OneShotDatasetGenerator(),
+        generation_controller=OneShotDatasetGenerationController(),
         context=data_generation_context,
         writer=JsonFileSystemDatasetWriter(
             output_path=filesystem_writers_arguments.args.output_dir,
