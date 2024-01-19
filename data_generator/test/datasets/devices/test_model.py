@@ -17,3 +17,15 @@ def should_return_partition_key_for_the_device():
     partition_key = device.entity_partition_key()
 
     assert_that(partition_key).is_equal_to('mac')
+
+
+def should_return_default_partition_key_for_the_device_without_type():
+    device = Device(type=None, full_name='Mac', version='12.0')
+
+    partition_key = device.entity_partition_key()
+
+    assert_that(partition_key).is_none()
+    assert_that(device.partition_key()).is_not_none()
+    assert_that(device.partition_key()).is_not_empty()
+    uuid4_pattern = '[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}'
+    assert_that(device.partition_key()).matches(uuid4_pattern)

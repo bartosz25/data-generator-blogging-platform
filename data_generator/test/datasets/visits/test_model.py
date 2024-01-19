@@ -54,3 +54,28 @@ def should_return_partition_key_for_the_visit():
     partition_key = visit.entity_partition_key()
 
     assert_that(partition_key).is_equal_to('visit 1')
+
+
+def should_return_default_partition_key_for_the_visit_without_visit_id():
+    visit = Visit(visit_id=None,
+                  event_time=datetime.datetime(year=2023, month=10, day=30, hour=18, minute=38, second=55),
+                  user_id='user 1', keep_private=True, page='home.html',
+                  context=VisitContext(
+                      referral='google.com', ad_id='ad 1',
+                      user=UserContext(
+                          ip='127.0.0.1', login=None,
+                          connected_since=datetime.datetime(year=2023, month=10, day=30, hour=18, minute=20, second=55)
+                      ),
+                      technical=TechnicalContext(
+                          browser='Firefox', browser_version='1beta', network_type='wifi',
+                          device_type='pc', device_version='Windows 10'
+                      )
+                  ))
+
+    partition_key = visit.entity_partition_key()
+
+    assert_that(partition_key).is_none()
+    assert_that(visit.partition_key()).is_not_none()
+    assert_that(visit.partition_key()).is_not_empty()
+    uuid4_pattern = '[a-f0-9]{8}-?[a-f0-9]{4}-?4[a-f0-9]{3}-?[89ab][a-f0-9]{3}-?[a-f0-9]{12}'
+    assert_that(visit.partition_key()).matches(uuid4_pattern)
