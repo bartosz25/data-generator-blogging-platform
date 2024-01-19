@@ -17,5 +17,5 @@ class RegisteredUser(DataGeneratorEntity):
     def as_dict(self) -> Dict[str, Any]:
         return dataclasses.asdict(self)
 
-    def partition_key(self) -> str:
+    def entity_partition_key(self) -> str:
         return self.login

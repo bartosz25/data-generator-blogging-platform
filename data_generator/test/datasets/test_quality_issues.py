@@ -16,7 +16,7 @@ class DummyDataEntity(DataGeneratorEntity):
     def as_dict(self) -> Dict[str, Any]:
         pass
 
-    def partition_key(self) -> str:
+    def entity_partition_key(self) -> str:
         pass
 
 

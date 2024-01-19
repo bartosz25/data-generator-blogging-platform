@@ -30,6 +30,6 @@ def should_return_partition_key_for_the_user():
                                                                       second=0),
                           last_connection_datetime=None)
 
-    partition_key = user.partition_key()
+    partition_key = user.entity_partition_key()
 
     assert_that(partition_key).is_equal_to('abc')

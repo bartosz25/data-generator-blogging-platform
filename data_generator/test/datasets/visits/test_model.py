@@ -51,6 +51,6 @@ def should_return_partition_key_for_the_visit():
                       )
                   ))
 
-    partition_key = visit.partition_key()
+    partition_key = visit.entity_partition_key()
 
     assert_that(partition_key).is_equal_to('visit 1')

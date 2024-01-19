@@ -43,7 +43,7 @@ class KafkaDatasetWriter(DatasetWriter):
             if error:
                 logging.error("Record was not correctly delivered: %s", error)
 
-        event_key = row.partition_key()
+        event_key = row.entity_partition_key()
         event_json = json.dumps(row.as_dict(), default=json_converter)
         self.producer.produce(topic=self.output_topic, key=bytes(event_key, encoding='utf-8'),
                               value=bytes(event_json, encoding='utf-8'),

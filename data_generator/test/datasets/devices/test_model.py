@@ -14,6 +14,6 @@ def should_return_device_as_json():
 def should_return_partition_key_for_the_device():
     device = Device(type='mac', full_name='Mac', version='12.0')
 
-    partition_key = device.partition_key()
+    partition_key = device.entity_partition_key()
 
     assert_that(partition_key).is_equal_to('mac')
