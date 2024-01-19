@@ -39,6 +39,7 @@ class DatasetGenerationContext:
     duplicates_percentage: int
     missing_fields_percentage: int
     unprocessable_rows_percentage: int
+    late_rows_percentage: int
     irregular_data_blocker: DataGenerationBlocker
     entity_generator: EntityGenerator
 

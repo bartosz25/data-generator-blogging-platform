@@ -4,6 +4,7 @@ dataset:
     duplicates: 25
     missing_fields: 31
     unprocessable_rows: 0
+    late_rows_percentage: 0
 data_blocker:
   type: sleep
   configuration:

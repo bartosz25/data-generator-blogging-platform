@@ -6,7 +6,7 @@ from data_generator.datasets.generation_context import DatasetGenerationContext,
 
 
 def should_generate_dataset_without_issues():
-    context = DatasetGenerationContext(number_of_rows=100, duplicates_percentage=0,
+    context = DatasetGenerationContext(number_of_rows=100, duplicates_percentage=0, late_rows_percentage=0,
                                        missing_fields_percentage=0, unprocessable_rows_percentage=0,
                                        irregular_data_blocker=NotBlockingDataGenerationBlocker(),
                                        entity_generator=DeviceEntityGenerator())
@@ -20,7 +20,7 @@ def should_generate_dataset_without_issues():
 
 
 def should_generate_dataset_with_issues_only():
-    context = DatasetGenerationContext(number_of_rows=100, duplicates_percentage=33,
+    context = DatasetGenerationContext(number_of_rows=100, duplicates_percentage=33, late_rows_percentage=0,
                                        missing_fields_percentage=33, unprocessable_rows_percentage=34,
                                        irregular_data_blocker=NotBlockingDataGenerationBlocker(),
                                        entity_generator=DeviceEntityGenerator())
@@ -35,7 +35,7 @@ def should_generate_dataset_with_issues_only():
 
 
 def should_generate_dataset_with_issues_and_good_data():
-    context = DatasetGenerationContext(number_of_rows=100, duplicates_percentage=15,
+    context = DatasetGenerationContext(number_of_rows=100, duplicates_percentage=15,  late_rows_percentage=0,
                                        missing_fields_percentage=15, unprocessable_rows_percentage=20,
                                        irregular_data_blocker=NotBlockingDataGenerationBlocker(),
                                        entity_generator=DeviceEntityGenerator())

@@ -32,6 +32,7 @@ class YamlDatasetGenerationContextParser:
                 duplicates_percentage=dataset_config_composition['duplicates'],
                 missing_fields_percentage=dataset_config_composition['missing_fields'],
                 unprocessable_rows_percentage=dataset_config_composition['unprocessable_rows'],
+                late_rows_percentage=dataset_config_composition['late_rows_percentage'],
                 irregular_data_blocker=data_blocker,
                 entity_generator=entity_generator
             )
