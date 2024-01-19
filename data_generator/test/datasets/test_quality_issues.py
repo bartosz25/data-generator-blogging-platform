@@ -4,7 +4,7 @@ from assertpy import assert_that
 
 from data_generator.datasets.data_generator_entity import DataGeneratorEntity
 from data_generator.datasets.quality_issues import EmptyRowDecorator, DuplicatesRowDecorator, \
-    UnprocessableRecordRowDecorator, MissingFieldsRowDecorator
+    UnprocessableRecordRowDecorator, MissingFieldsRowDecorator, LateRowDecorator
 
 
 class DummyDataEntity(DataGeneratorEntity):
@@ -58,14 +58,26 @@ def should_return_unprocessable_input_record_for_UnprocessableRecordRowDecorator
 def should_return_input_record_with_missing_fields_for_MissingFieldsRowDecorator():
     decorator = MissingFieldsRowDecorator(lambda x: DummyDataEntity(), 1)
 
+    decorated_rows = decorator.return_decorated_row()
+    assert_that(decorated_rows).is_length(1)
     has_missing_fields = False
-    for i in range(0, 100):
-        # it works from time to time, so run at most 100 times; logically we should have the issues
-        # sometime
-        decorated_rows = decorator.return_decorated_row()
-        assert_that(decorated_rows).is_length(1)
-        if decorated_rows[0].a is None or decorated_rows[0].b is None:
-            has_missing_fields = True
-            break
+    if decorated_rows[0].a is None or decorated_rows[0].b is None:
+        has_missing_fields = True
 
     assert_that(has_missing_fields, 'Missing fields on the tested decorator').is_true()
+
+
+def should_return_row_late():
+    decorator = LateRowDecorator(lambda x: DummyDataEntity(), 1, 10)
+
+    assert_that(decorator._LateRowDecorator__late_rows.qsize()).is_equal_to(0)
+
+    decorator.decorate(DummyDataEntity())
+
+    assert_that(decorator._LateRowDecorator__late_rows.qsize()).is_equal_to(1)
+
+    decorated_late_rows = []
+    for _ in range(1, 100):
+        decorated_late_rows += decorator.return_decorated_row()
+
+    assert_that(decorated_late_rows).is_not_empty()

@@ -2,6 +2,7 @@ import logging
 import random
 import types
 from abc import abstractmethod, ABC
+from queue import Queue
 from typing import List, Callable
 
 from data_generator.datasets.data_generator_entity import DataGeneratorEntity
@@ -36,14 +37,12 @@ class MissingFieldsRowDecorator(RowDecorator):
 
     def decorate(self, row_to_decorate: DataGeneratorEntity):
         callable_types = types.FunctionType, types.MethodType
-        has_missing_fields = False
-        for key, value in row_to_decorate.__dict__.items():
-            should_be_missing = random.choices(population=[True, False], weights=[0.3, 0.8])[0]
-            if not isinstance(value, callable_types) and should_be_missing:
-                setattr(row_to_decorate, key, None)
-                has_missing_fields = True
-        if has_missing_fields:
-            logging.debug(f'{row_to_decorate} has missing fields')
+        all_callable_fields = ([key for key, value in row_to_decorate.__dict__.items()
+                                if not isinstance(value, callable_types)])
+
+        nullable_fields = random.sample(all_callable_fields, random.randint(1, len(all_callable_fields)))
+        for nullable_field_attribute in nullable_fields:
+            setattr(row_to_decorate, nullable_field_attribute, None)
         return [row_to_decorate]
 
 
@@ -59,3 +58,25 @@ class EmptyRowDecorator(RowDecorator):
 
     def decorate(self, row_to_decorate: DataGeneratorEntity):
         return [row_to_decorate]
+
+
+class LateRowDecorator(RowDecorator):
+    DEQUEUE_DISTRIBUTION = [False] * 92 + [True] * 8
+
+    def __init__(self, decorator_method: Callable[[int], DataGeneratorEntity], entity_index_from_decorator: int,
+                 max_late_rows: int = 100000):
+        super().__init__(decorator_method, entity_index_from_decorator)
+        self.__late_rows = Queue(maxsize=max_late_rows)
+
+    def decorate(self, row_to_decorate: DataGeneratorEntity) -> List[DataGeneratorEntity]:
+        should_dequeue = random.choice(LateRowDecorator.DEQUEUE_DISTRIBUTION) or self.__late_rows.full()
+        rows_to_return = []
+        if should_dequeue:
+            rows_to_return_number = min(random.randint(1, 50), self.__late_rows.qsize())
+            for _ in range(0, rows_to_return_number):
+                rows_to_return.append(self.__late_rows.get())
+        # Full Exception should happen as we dequeue when the queue is full, hence we should always have at least one
+        # spot available
+        self.__late_rows.put(row_to_decorate)
+
+        return rows_to_return
