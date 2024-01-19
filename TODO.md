@@ -13,3 +13,10 @@
 # Release
 - [ ] Docker
   - [ ] release from Github actions
+
+# Test
+- [ ] Late data decorator
+- [ ] JSON and CSV IO sinks
+
+# Code
+- [ ] add defaults 0 to all percentages to avoid defining them everytime, even for the 0s

@@ -38,6 +38,7 @@ class JsonFileSystemDatasetWriter(DatasetWriter):
                 else:
                     dataset_partial_file.write(json.dumps(row.as_dict(), default=json_converter))
                 dataset_partial_file.write('\n')
+        self.rows_to_write = []
 
 
 class CsvFileSystemWriter(DatasetWriter):
@@ -60,19 +61,21 @@ class CsvFileSystemWriter(DatasetWriter):
         self._flush_partial_dataset()
 
     def _flush_partial_dataset(self):
-        csv_header = list(self.rows_to_write[0][0].as_dict().keys())
-        logging.debug(f'Flushing to {self.output_path_with_file}')
-        with open(self.output_path_with_file, 'a') as dataset_partial_file:
-            visit_csv_writer = csv.DictWriter(
-                dataset_partial_file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL,
-                fieldnames=csv_header
-            )
-            if not self.header_written:
-                visit_csv_writer.writeheader()
-                self.header_written = True
-            for row in self.rows_to_write:
-                if type(row) is str:
-                    dataset_partial_file.write(row)
-                    dataset_partial_file.write('\n')
-                else:
-                    visit_csv_writer.writerow(row.as_dict())
+        if self.rows_to_write:
+            csv_header = list(self.rows_to_write[0].as_dict().keys())
+            logging.debug(f'Flushing to {self.output_path_with_file}')
+            with open(self.output_path_with_file, 'a') as dataset_partial_file:
+                visit_csv_writer = csv.DictWriter(
+                    dataset_partial_file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL,
+                    fieldnames=csv_header
+                )
+                if not self.header_written:
+                    visit_csv_writer.writeheader()
+                    self.header_written = True
+                for row in self.rows_to_write:
+                    if type(row) is str:
+                        dataset_partial_file.write(row)
+                        dataset_partial_file.write('\n')
+                    else:
+                        visit_csv_writer.writerow(row.as_dict())
+            self.rows_to_write = []
