@@ -1,4 +1,4 @@
-from typing import Dict, Any, List, Callable
+from typing import Dict, Any, List, Callable, Optional
 
 import yaml
 
@@ -29,10 +29,14 @@ class YamlDatasetGenerationContextParser:
             dataset_config_composition = dataset_config['composition_percentage']
             self._data_generation_context = DatasetGenerationContext(
                 number_of_rows=dataset_config['rows'],
-                duplicates_percentage=dataset_config_composition['duplicates'],
-                missing_fields_percentage=dataset_config_composition['missing_fields'],
-                unprocessable_rows_percentage=dataset_config_composition['unprocessable_rows'],
-                late_rows_percentage=dataset_config_composition['late_rows_percentage'],
+                duplicates_percentage=YamlDatasetGenerationContextParser._get_data_composition_or_default(
+                    dataset_config_composition, 'duplicates'),
+                missing_fields_percentage=YamlDatasetGenerationContextParser._get_data_composition_or_default(
+                    dataset_config_composition, 'missing_fields'),
+                unprocessable_rows_percentage=YamlDatasetGenerationContextParser._get_data_composition_or_default(
+                    dataset_config_composition, 'unprocessable_rows'),
+                late_rows_percentage=YamlDatasetGenerationContextParser._get_data_composition_or_default(
+                    dataset_config_composition, 'late_rows_percentage'),
                 irregular_data_blocker=data_blocker,
                 entity_generator=entity_generator
             )
@@ -50,6 +54,13 @@ class YamlDatasetGenerationContextParser:
     @property
     def writers(self) -> List[DatasetWriter]:
         return self._writers
+
+    @staticmethod
+    def _get_data_composition_or_default(composition_config: Dict[str, Optional[int]], attribute: str) -> int:
+        if attribute in composition_config:
+            return composition_config[attribute]
+        else:
+            return 0
 
     @staticmethod
     def _get_data_blocker(data_blocker: Dict[str, Any]) -> DataGenerationBlocker:

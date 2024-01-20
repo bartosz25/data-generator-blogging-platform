@@ -4,7 +4,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    image: waitingforcode/data-generator-blogging-platform:0.1-beta
+    image: waitingforcode/data-generator-blogging-platform:0.2-beta
     container_name: dedp_data_generator_debezium
     volumes:
       - ./generation_configuration.yaml:/home/data_generator_user/generation_configuration.yaml

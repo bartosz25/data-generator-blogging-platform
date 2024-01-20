@@ -36,12 +36,12 @@ class BlockingDataGenerationBlocker(DataGenerationBlocker):
 @dataclasses.dataclass
 class DatasetGenerationContext:
     number_of_rows: int
-    duplicates_percentage: int
-    missing_fields_percentage: int
-    unprocessable_rows_percentage: int
-    late_rows_percentage: int
     irregular_data_blocker: DataGenerationBlocker
     entity_generator: EntityGenerator
+    duplicates_percentage: int = 0
+    missing_fields_percentage: int = 0
+    unprocessable_rows_percentage: int = 0
+    late_rows_percentage: int = 0
 
     def get_rows_to_generate_with_maybe_decorators(self) -> List[RowDecorator]:
         rows_to_generate = self.number_of_rows

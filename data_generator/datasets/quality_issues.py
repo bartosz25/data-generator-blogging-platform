@@ -73,6 +73,7 @@ class LateRowDecorator(RowDecorator):
         rows_to_return = []
         if should_dequeue:
             rows_to_return_number = min(random.randint(1, 50), self.__late_rows.qsize())
+            logging.info(f'Flushing {rows_to_return_number} of {self.__late_rows.qsize()} late records')
             for _ in range(0, rows_to_return_number):
                 rows_to_return.append(self.__late_rows.get())
         # Full Exception should happen as we dequeue when the queue is full, hence we should always have at least one
