@@ -24,11 +24,8 @@ if __name__ == "__main__":
                 entity_generator=VisitEntityGenerator(start_time='2023-11-24T00:00:00Z'),
             )
 
-    generate_dataset(
-        generation_controller=ContinuousDatasetGenerator(),
-        context=data_generation_context,
-        writer=KafkaDatasetWriter(
-            broker=kafka_arguments.args.broker, extra_producer_config={'queue.buffering.max.ms': 2000},
-            output_topic=kafka_arguments.args.topic
-        )
-    )
+    generate_dataset(generation_controller=ContinuousDatasetGenerator(), context=data_generation_context,
+                     writer=KafkaDatasetWriter(
+                         broker=kafka_arguments.args.broker, extra_producer_config={'queue.buffering.max.ms': 2000},
+                         output_topic=kafka_arguments.args.topic
+                     ))

@@ -3,6 +3,7 @@ import logging
 import random
 import threading
 import uuid
+from typing import List
 
 from data_generator.datasets.data_generator_entity import DataGeneratorEntity
 from data_generator.datasets.generation_context import EntityGenerator
@@ -28,8 +29,8 @@ class RegisteredUserEntityGenerator(EntityGenerator):
             last_connection_date = None
             if random.choice([True, False]):
                 today = datetime.datetime.today()
-                first_connection_date = registered_date + datetime.timedelta(minutes=random.randint(1, 60*24*6))
-                last_connection_date = today - datetime.timedelta(minutes=random.randint(1, 60*24*20))
+                first_connection_date = registered_date + datetime.timedelta(minutes=random.randint(1, 60 * 24 * 6))
+                last_connection_date = today - datetime.timedelta(minutes=random.randint(1, 60 * 24 * 20))
                 # TODO: check if last is always after the first and they don't overlap with today()!
 
             registered_user = RegisteredUser(
@@ -39,3 +40,6 @@ class RegisteredUserEntityGenerator(EntityGenerator):
             )
             self.generated_rows.append(registered_user)
             return registered_user
+
+    def get_generated_users(self) -> List[RegisteredUser]:
+        return self.generated_rows

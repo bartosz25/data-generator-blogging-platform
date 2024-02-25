@@ -2,6 +2,7 @@
 - [ ] describe datasets
   - [ ] define the schemas
   - [ ] explain the generation logic
+  - [ ] explain the reference datasets
 
 # Examples
 - [ ] Docker examples
@@ -20,3 +21,4 @@
 
 # Code
 - [ ] add defaults 0 to all percentages to avoid defining them everytime, even for the 0s
+- [ ] add uniqueness configuration for the devices

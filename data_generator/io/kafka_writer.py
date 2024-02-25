@@ -1,6 +1,6 @@
 import json
 import logging
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from confluent_kafka import Producer
 
@@ -11,11 +11,12 @@ from data_generator.io.dataset_writer import DatasetWriter
 
 class KafkaDatasetWriter(DatasetWriter):
 
-    def __init__(self, broker: str, output_topic: str, extra_producer_config: Dict[str, Any]):
+    def __init__(self, broker: str, output_topic: str, extra_producer_config: Optional[Dict[str, Any]] = None):
         # check https://github.com/edenhill/librdkafka/blob/master/CONFIGURATION.md for more information
+        config_to_add = extra_producer_config if extra_producer_config else {}
         producer_config = {
             **{'bootstrap.servers': broker},
-            **extra_producer_config
+            **config_to_add
         }
         self.producer = Producer(producer_config)
         self.output_topic = output_topic

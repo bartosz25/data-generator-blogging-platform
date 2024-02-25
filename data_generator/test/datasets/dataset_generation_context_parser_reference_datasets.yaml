@@ -1,0 +1,57 @@
+reference_datasets:
+  - reference_key: 'users_provider'
+    entity:
+      type: user
+    dataset:
+      rows: 100
+      composition_percentage:
+        duplicates: 25
+        missing_fields: 31
+        unprocessable_rows: 0
+        late_rows_percentage: 0
+    writer:
+      type: json
+      configuration:
+        output_path: '/tmp/users'
+        clean_path: true
+  - reference_key: 'devices_provider'
+    dataset:
+      rows: 10
+    entity:
+      type: device
+    writer:
+      type: json
+      configuration:
+        output_path: '/tmp/devices'
+        clean_path: true
+dataset:
+  rows: 1000
+  composition_percentage:
+    duplicates: 25
+    missing_fields: 31
+    unprocessable_rows: 0
+    late_rows_percentage: 0
+data_blocker:
+  type: sleep
+  configuration:
+    sleep_time_range_seconds:
+      from: 1
+      to: 6
+entity:
+  type: visit
+  configuration:
+    start_time: '2023-11-24T00:00:00Z'
+  reference_datasets:
+    users: 'users_provider'
+    devices: 'devices_provider'
+generator:
+  type: fixed-times
+  configuration:
+    all_runs: 4
+writer:
+  type: kafka
+  configuration:
+    broker: 'localhost:9094'
+    output_topic: 'visits'
+    extra_producer_config:
+      'queue.buffering.max.ms': 2000

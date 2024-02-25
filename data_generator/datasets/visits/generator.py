@@ -3,13 +3,15 @@ import datetime
 import logging
 import random
 import threading
-import uuid
 from typing import List
 
 from faker import Faker
 
 from data_generator.datasets.data_generator_entity import EntityGenerator, DataGeneratorEntity
-from data_generator.datasets.visits.model import Visit, VisitContext, UserContext, TechnicalContext
+from data_generator.datasets.visits.devices_providers import TechnicalContextProvider, \
+    RandomTechnicalContextProvider
+from data_generator.datasets.visits.model import Visit, VisitContext
+from data_generator.datasets.visits.users_providers import UserContextProvider, RandomUserContextProvider
 
 
 class VisitEntityMutator:
@@ -42,10 +44,14 @@ class VisitEntityGenerator(EntityGenerator):
     REFERRALS = ['Google Search', 'Twitter', 'Facebook', 'LinkedIn', 'YouTube', 'Medium',
                  'Google Ads', 'StackOverflow', None]
 
-    def __init__(self, start_time: str):
+    def __init__(self, start_time: str,
+                 technical_context_provider: TechnicalContextProvider = RandomTechnicalContextProvider(),
+                 user_context_provider: UserContextProvider = RandomUserContextProvider()):
         self.generated_rows: List[VisitEntityGeneratorWrapper] = []
         self.start_time_as_datetime = datetime.datetime.strptime(start_time, '%Y-%m-%dT%H:%M:%S%z')
         self.faker_generator = Faker()
+        self.technical_context_provider = technical_context_provider
+        self.user_context_provider = user_context_provider
 
     def generate_row(self, index: int) -> DataGeneratorEntity:
         logging.debug(f'Generating Visit for Index {index}')
@@ -63,38 +69,27 @@ class VisitEntityGenerator(EntityGenerator):
                     visit_remaining_refreshes=remaining_refreshes
                 )
             else:
-                visit_wrapper = self._start_new_visit(page=page)
+                visit_wrapper = self._start_new_visit(index=index, page=page)
             self.generated_rows[index] = visit_wrapper
             return visit_wrapper.visit
         except IndexError:
-            visit_wrapper = self._start_new_visit(page=page)
+            visit_wrapper = self._start_new_visit(index=index, page=page)
             self.generated_rows.append(visit_wrapper)
             return visit_wrapper.visit
 
-    def _start_new_visit(self, page: str) -> VisitEntityGeneratorWrapper:
+    def _start_new_visit(self, index: int, page: str) -> VisitEntityGeneratorWrapper:
         keep_private = random.choice([True, False, False, False, False, False, False])
         visit_id = f'{threading.current_thread().ident}_{len(self.generated_rows)}'
-        user_id = f'{threading.current_thread().ident}_{str(uuid.uuid4())}'
+
+        user_context, user_id = self.user_context_provider.provide(index=index,
+                                                                   visits_start_time=self.start_time_as_datetime)
 
         ads_ids = [None, None, None, 'ad 1', 'ad 2', 'ad 3', 'ad 4', 'ad 5']
-        connection_date = [None, None,
-                           (self.start_time_as_datetime - datetime.timedelta(days=random.randint(1, 30)))]
         visit_context = VisitContext(
             referral=random.choice(VisitEntityGenerator.REFERRALS),
             ad_id=random.choice(ads_ids),
-            user=UserContext(
-                ip=self.faker_generator.ipv4(),
-                login=self.faker_generator.simple_profile()['username'],
-                connected_since=random.choice(connection_date)
-            ),
-            technical=TechnicalContext(
-                browser=random.choice(['Chrome', 'Firefox', 'Safari']),
-                browser_version=random.choice(['20.0', '20.1', '20.2', '21.0', '22.0', '23.0', '23.1', '23.2',
-                                               '24.11', '25.09']),
-                network_type=random.choice(['5G', '4G', 'Wi-Fi', 'LAN']),
-                device_type=random.choice(['PC', 'MacBook', 'iPad', 'Smartphone', 'iPhone']),
-                device_version=random.choice(['1.0', '2.0', '3.0', '4.0', '5.0', '6.0'])
-            )
+            user=user_context,
+            technical=self.technical_context_provider.provide()
         )
         visit = Visit(
             visit_id=visit_id, event_time=self.start_time_as_datetime, user_id=user_id,

@@ -1,6 +1,7 @@
 import logging
 import random
 import time
+from typing import List
 
 from data_generator.datasets.devices.model import Device
 from data_generator.datasets.data_generator_entity import DataGeneratorEntity
@@ -67,6 +68,9 @@ class DeviceEntityGenerator(EntityGenerator):
             self.generated_rows.append(device)
             self.already_generated_keys.add(device_key)
             return device
+
+    def get_generated_devices(self) -> List[Device]:
+        return self.generated_rows
 
     @staticmethod
     def _generate_device(was_duplicated: bool) -> Device:

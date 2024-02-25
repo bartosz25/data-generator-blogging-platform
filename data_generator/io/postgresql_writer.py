@@ -1,8 +1,12 @@
+import json
 from typing import List
 
 import psycopg2
+from psycopg2._psycopg import AsIs
+from psycopg2.extensions import register_adapter
 
 from data_generator.datasets.data_generator_entity import DataGeneratorEntity
+from data_generator.io.converters import json_converter
 from data_generator.io.dataset_writer import DatasetWriter
 
 
@@ -17,6 +21,12 @@ class PostgreSQLDatasetWriter(DatasetWriter):
         self.table_columns_as_text = ', '.join(table_columns)
         self.insert_placeholders = ', '.join(['%s' for i in table_columns])
         self.row_fields_to_insert = row_fields_to_insert
+
+        # this adapter is required for JSONB types
+        def adapt_dict(dict_var):
+            return AsIs("'" + json.dumps(dict_var, default=json_converter) + "'")
+
+        register_adapter(dict, adapt_dict)
 
     def write_dataset_decorated_rows(self, decorated_rows: List[DataGeneratorEntity]):
         for row in decorated_rows:

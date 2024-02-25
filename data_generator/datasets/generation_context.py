@@ -9,6 +9,7 @@ from typing import List
 from data_generator.datasets.data_generator_entity import EntityGenerator
 from data_generator.datasets.quality_issues import RowDecorator, DuplicatesRowDecorator, MissingFieldsRowDecorator, \
     UnprocessableRecordRowDecorator, EmptyRowDecorator
+from data_generator.io.dataset_writer import DatasetWriter
 
 
 class DataGenerationBlocker(ABC):
@@ -78,3 +79,9 @@ class DatasetGenerationContext:
     @staticmethod
     def calculate_percentage(rows_to_generate: int, percentage: int) -> int:
         return int(floor(rows_to_generate * (percentage / 100)))
+
+
+@dataclasses.dataclass
+class DatasetGenerationContextWithWriter:
+    dataset_generation_context: DatasetGenerationContext
+    writers: List[DatasetWriter]

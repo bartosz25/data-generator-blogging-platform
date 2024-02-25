@@ -75,3 +75,36 @@ def should_generate_context_for_partitioned_configuration_file():
      .is_equal_to('NotBlockingDataGenerationBlocker'))
     (assert_that(type(config_parser.data_generation_context.entity_generator).__name__)
      .is_equal_to('DeviceEntityGenerator'))
+
+
+def should_generate_dataset_with_reference_datasets():
+    path = pathlib.Path(__file__).parent.absolute()
+    config_path = f'{path}/dataset_generation_context_parser_reference_datasets.yaml'
+
+    config_parser = YamlDatasetGenerationContextParser(configuration_file_path=config_path)
+
+    assert_that(config_parser.reference_datasets_contexts).is_length(2)
+    # users
+    users_provider = config_parser.reference_datasets_contexts['users_provider']
+    (assert_that(type(users_provider.dataset_generation_context.entity_generator).__name__)
+     .is_equal_to('RegisteredUserEntityGenerator'))
+    context = users_provider.dataset_generation_context.__dict__
+    assert_that(context['number_of_rows']).is_equal_to(100)
+    assert_that(context['duplicates_percentage']).is_equal_to(25)
+    assert_that(context['missing_fields_percentage']).is_equal_to(31)
+    assert_that(context['unprocessable_rows_percentage']).is_equal_to(0)
+    assert_that(users_provider.writers).is_length(1)
+    assert_that(type(users_provider.writers[0]).__name__).is_equal_to('JsonFileSystemDatasetWriter')
+    assert_that(users_provider.writers[0].output_path_with_file).is_equal_to('/tmp/users/dataset.json')
+    # devices
+    devices_provider = config_parser.reference_datasets_contexts['devices_provider']
+    (assert_that(type(devices_provider.dataset_generation_context.entity_generator).__name__)
+     .is_equal_to('DeviceEntityGenerator'))
+    context = devices_provider.dataset_generation_context.__dict__
+    assert_that(context['number_of_rows']).is_equal_to(10)
+    assert_that(context['duplicates_percentage']).is_equal_to(0)
+    assert_that(context['missing_fields_percentage']).is_equal_to(0)
+    assert_that(context['unprocessable_rows_percentage']).is_equal_to(0)
+    assert_that(devices_provider.writers).is_length(1)
+    assert_that(type(devices_provider.writers[0]).__name__).is_equal_to('JsonFileSystemDatasetWriter')
+    assert_that(devices_provider.writers[0].output_path_with_file).is_equal_to('/tmp/devices/dataset.json')

@@ -30,10 +30,7 @@ if __name__ == "__main__":
     for partition in partitions_to_generate:
         logging.info(f'Generating partition {partition}')
         output_path = f'{filesystem_partitioned_writers_arguments.args.output_dir}/{partition}'
-        generate_dataset(
-            generation_controller=OneShotDatasetGenerationController(),
-            context=data_generation_context,
-            writer=JsonFileSystemDatasetWriter(
-                output_path=output_path,
-                clean_path=True)
-        )
+        generate_dataset(generation_controller=OneShotDatasetGenerationController(), context=data_generation_context,
+                         writer=JsonFileSystemDatasetWriter(
+                             output_path=output_path,
+                             clean_path=True))

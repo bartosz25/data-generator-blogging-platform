@@ -24,10 +24,7 @@ if __name__ == "__main__":
         irregular_data_blocker=NotBlockingDataGenerationBlocker(),
         entity_generator=DeviceEntityGenerator()
     )
-    generate_dataset(
-        generation_controller=OneShotDatasetGenerationController(),
-        context=data_generation_context,
-        writer=JsonFileSystemDatasetWriter(
-            output_path=filesystem_writers_arguments.args.output_dir,
-            clean_path=True)
-    )
+    generate_dataset(generation_controller=OneShotDatasetGenerationController(), context=data_generation_context,
+                     writer=JsonFileSystemDatasetWriter(
+                         output_path=filesystem_writers_arguments.args.output_dir,
+                         clean_path=True))
