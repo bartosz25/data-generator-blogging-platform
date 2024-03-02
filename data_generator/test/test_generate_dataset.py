@@ -59,9 +59,11 @@ def should_generate_dataset_with_reference_datasets():
             json_data = json.loads(line.strip())
             for expected_field in expected_fields:
                 assert_that(json_data[expected_field]).is_not_none()
-                connected_since = json_data['context']['user']['connected_since']
-                if not connected_since:
+                user_data = json_data['context']['user']
+                if 'connected_since' not in user_data:
                     connected_since = ''
+                else:
+                    connected_since = user_data['connected_since']
                 device_key = (json_data['context']['technical']['device_type'] +
                               json_data['context']['technical']['device_version'])
                 assert_that(generated_devices).contains(device_key)

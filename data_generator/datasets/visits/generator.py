@@ -79,7 +79,8 @@ class VisitEntityGenerator(EntityGenerator):
 
     def _start_new_visit(self, index: int, page: str) -> VisitEntityGeneratorWrapper:
         keep_private = random.choice([True, False, False, False, False, False, False])
-        visit_id = f'{threading.current_thread().ident}_{len(self.generated_rows)}'
+        visit_id_random_number = random.randint(0, 400000)
+        visit_id = f'{visit_id_random_number}{threading.current_thread().ident}_{len(self.generated_rows)}'
 
         user_context, user_id = self.user_context_provider.provide(index=index,
                                                                    visits_start_time=self.start_time_as_datetime)
